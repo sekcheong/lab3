@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 
 
 class Volume {
+
 	// the weight parameters
 	public double[] W;
 
@@ -352,6 +353,7 @@ class Volume {
 
 
 class Example {
+
 	public Volume x;
 	public Volume y;
 
@@ -370,17 +372,17 @@ class Example {
 }
 
 
-class DataSamples {
+class ExampleSet {
 
 	private Example[] _examples;
 
 
-	public DataSamples() {
+	public ExampleSet() {
 		_examples = new Example[0];
 	}
 
 
-	public DataSamples(Example[] examples) {
+	public ExampleSet(Example[] examples) {
 		_examples = new Example[examples.length];
 		for (int i = 0; i < examples.length; i++) {
 			_examples[i] = examples[i];
@@ -388,7 +390,7 @@ class DataSamples {
 	}
 
 
-	public DataSamples(List<Example> examples) {
+	public ExampleSet(List<Example> examples) {
 		_examples = new Example[examples.size()];
 		for (int i = 0; i < examples.size(); i++) {
 			_examples[i] = examples.get(i);
@@ -406,7 +408,7 @@ class DataSamples {
 	}
 
 
-	public DataSamples[] split() {
+	public ExampleSet[] split() {
 		return null;
 	}
 
@@ -427,8 +429,7 @@ class DataSamples {
 
 }
 
-enum LayerType
-{
+enum LayerType {
 	input, fullconnect, convolution, pool, regression, softmax, leru, sigmoid, tanh, dropout, maxout
 }
 
@@ -884,8 +885,7 @@ class ConvNet {
 
 class ImageUtil {
 
-	public enum LoadOption
-	{
+	public enum LoadOption {
 		RGB, RGB_EDGES, GRAY, RGB_GRAY, EDGES,
 	}
 
@@ -902,75 +902,75 @@ class ImageUtil {
 
 		switch (option) {
 
-		case RGB:
-			// RGB volume
-			v = new Volume(width, height, 3);
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
-					Color c = new Color(image.getRGB(i, j));
-					v.set(i, j, 0, (((double) c.getRed())) / 255);
-					v.set(i, j, 1, (((double) c.getGreen())) / 255);
-					v.set(i, j, 2, (((double) c.getBlue())) / 255);
+			case RGB:
+				// RGB volume
+				v = new Volume(width, height, 3);
+				for (int i = 0; i < width; i++) {
+					for (int j = 0; j < height; j++) {
+						Color c = new Color(image.getRGB(i, j));
+						v.set(i, j, 0, (((double) c.getRed())) / 255);
+						v.set(i, j, 1, (((double) c.getGreen())) / 255);
+						v.set(i, j, 2, (((double) c.getBlue())) / 255);
+					}
 				}
-			}
-			break;
+				break;
 
-		case GRAY:
-			// Gray scale volume
-			v = new Volume(width, height, 1);
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
-					Color c = new Color(image.getRGB(i, j));
-					double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
-					v.set(i, j, 0, g);
+			case GRAY:
+				// Gray scale volume
+				v = new Volume(width, height, 1);
+				for (int i = 0; i < width; i++) {
+					for (int j = 0; j < height; j++) {
+						Color c = new Color(image.getRGB(i, j));
+						double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
+						v.set(i, j, 0, g);
+					}
 				}
-			}
-			break;
+				break;
 
-		case RGB_GRAY:
-			// RGB and gray scale volume
-			v = new Volume(width, height, 4);
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
-					Color c = new Color(image.getRGB(i, j));
-					v.set(i, j, 0, (((double) c.getRed())) / 255);
-					v.set(i, j, 1, (((double) c.getGreen())) / 255);
-					v.set(i, j, 2, (((double) c.getBlue())) / 255);
-					double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
-					v.set(i, j, 3, g);
+			case RGB_GRAY:
+				// RGB and gray scale volume
+				v = new Volume(width, height, 4);
+				for (int i = 0; i < width; i++) {
+					for (int j = 0; j < height; j++) {
+						Color c = new Color(image.getRGB(i, j));
+						v.set(i, j, 0, (((double) c.getRed())) / 255);
+						v.set(i, j, 1, (((double) c.getGreen())) / 255);
+						v.set(i, j, 2, (((double) c.getBlue())) / 255);
+						double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
+						v.set(i, j, 3, g);
+					}
 				}
-			}
-			break;
+				break;
 
-		case RGB_EDGES:
-			// RGB and edges volume
-			v = new Volume(width, height, 4);
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
-					Color c = new Color(image.getRGB(i, j));
-					v.set(i, j, 0, (((double) c.getRed())) / 255);
-					v.set(i, j, 1, (((double) c.getGreen())) / 255);
-					v.set(i, j, 2, (((double) c.getBlue())) / 255);
-					double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
-					v.set(i, j, 3, g);
+			case RGB_EDGES:
+				// RGB and edges volume
+				v = new Volume(width, height, 4);
+				for (int i = 0; i < width; i++) {
+					for (int j = 0; j < height; j++) {
+						Color c = new Color(image.getRGB(i, j));
+						v.set(i, j, 0, (((double) c.getRed())) / 255);
+						v.set(i, j, 1, (((double) c.getGreen())) / 255);
+						v.set(i, j, 2, (((double) c.getBlue())) / 255);
+						double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
+						v.set(i, j, 3, g);
+					}
 				}
-			}
-			v = sobelFilter(v, 3);
-			break;
+				v = sobelFilter(v, 3);
+				break;
 
-		case EDGES:
-			// Gray scale volume
-			v = new Volume(width, height, 1);
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
-					Color c = new Color(image.getRGB(i, j));
-					double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
-					v.set(i, j, 0, g);
+			case EDGES:
+				// Gray scale volume
+				v = new Volume(width, height, 1);
+				for (int i = 0; i < width; i++) {
+					for (int j = 0; j < height; j++) {
+						Color c = new Color(image.getRGB(i, j));
+						double g = rgbToGrayScale(c.getRed(), c.getGreen(), c.getBlue());
+						v.set(i, j, 0, g);
+					}
 				}
-			}
-			v = sobelFilter(v, 0);
+				v = sobelFilter(v, 0);
 
-			break;
+				break;
 		}
 		return v;
 	}
@@ -988,15 +988,15 @@ class ImageUtil {
 	private static Volume sobelFilter(Volume v, int z) {
 		Volume u = new Volume(v);
 		int[][] sobelX = {
-				{ -1, 0, 1 },
-				{ -2, 0, 2 },
-				{ -1, 0, 1 }
+							{ -1, 0, 1 },
+							{ -2, 0, 2 },
+							{ -1, 0, 1 }
 		};
 
 		int[][] sobelY = {
-				{ -1, -2, -1 },
-				{ 0, 0, 0 },
-				{ 1, 2, 1 }
+							{ -1, -2, -1 },
+							{ 0, 0, 0 },
+							{ 1, 2, 1 }
 		};
 
 		for (int x = 0; x < v.width(); x++) {
@@ -1090,28 +1090,28 @@ class ImageUtil {
 
 		int r = (int) (Math.random() * 2);
 		switch (r) {
-		case 0:
-			// Flip the image vertically
-			AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
-			tx.translate(0, -image.getHeight(null));
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			image = op.filter(image, null);
-			break;
+			case 0:
+				// Flip the image vertically
+				AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+				tx.translate(0, -image.getHeight(null));
+				AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+				image = op.filter(image, null);
+				break;
 
-		case 1:
-			// Flip the image horizontally
-			tx = AffineTransform.getScaleInstance(-1, 1);
-			tx.translate(-image.getWidth(null), 0);
-			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			image = op.filter(image, null);
-			break;
-		case 2:
-			// Flip the image vertically and horizontally; equivalent to rotating the image 180 degrees
-			tx = AffineTransform.getScaleInstance(-1, -1);
-			tx.translate(-image.getWidth(null), -image.getHeight(null));
-			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			image = op.filter(image, null);
-			break;
+			case 1:
+				// Flip the image horizontally
+				tx = AffineTransform.getScaleInstance(-1, 1);
+				tx.translate(-image.getWidth(null), 0);
+				op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+				image = op.filter(image, null);
+				break;
+			case 2:
+				// Flip the image vertically and horizontally; equivalent to rotating the image 180 degrees
+				tx = AffineTransform.getScaleInstance(-1, -1);
+				tx.translate(-image.getWidth(null), -image.getHeight(null));
+				op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+				image = op.filter(image, null);
+				break;
 		}
 
 		return image;
@@ -1262,7 +1262,9 @@ class ImageUtil {
 
 
 	public static BufferedImage imageToBufferedImage(Image img) {
-		if (img instanceof BufferedImage) { return (BufferedImage) img; }
+		if (img instanceof BufferedImage) {
+			return (BufferedImage) img;
+		}
 
 		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = bimage.createGraphics();
@@ -1305,15 +1307,15 @@ class ImageDataSetReader {
 		_cats = categories;
 		_option = option;
 		for (int i = 0; i < categories.length; i++) {
-			categories[i] = categories[i].trim()
-					.toLowerCase();
+			categories[i] = categories[i]	.trim()
+											.toLowerCase();
 		}
 	}
 
 
 	private int getCatNumber(String name) {
-		name = name.trim()
-				.toLowerCase();
+		name = name	.trim()
+					.toLowerCase();
 		for (int i = 0; i < _cats.length; i++) {
 			if (_cats[i].compareTo(name) == 0) return i;
 		}
@@ -1347,7 +1349,7 @@ class ImageDataSetReader {
 	}
 
 
-	public DataSamples readDataSet() {
+	public ExampleSet readDataSet() {
 
 		List<Example> examples = new ArrayList<Example>();
 
@@ -1359,8 +1361,8 @@ class ImageDataSetReader {
 
 			if (!file.isFile()) continue;
 
-			String fileName = file.getName()
-					.toLowerCase();
+			String fileName = file	.getName()
+									.toLowerCase();
 			if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) continue;
 
 			try {
@@ -1379,31 +1381,712 @@ class ImageDataSetReader {
 			}
 		}
 		Example[] data = examples.toArray(new Example[examples.size()]);
-		return new DataSamples(data);
+		return new ExampleSet(data);
 	}
 
 }
 
 
 
+class Input extends Layer {
+
+	public Input(int w, int h, int d) {
+
+		this.inW(w);
+		this.inH(h);
+		this.inD(d);
+
+		this.outW(w);
+		this.outH(h);
+		this.outD(d);
+
+		this.type = LayerType.input;
+	}
+
+
+	public Volume forward(double[] x) {
+		Volume v = new Volume(this.inW(), this.inH(), this.inD(), x);
+		return this.forward(v);
+	}
+
+
+	public Volume forward(Volume x) {
+		this.input = x;
+		this.output = x;
+		return x;
+	}
+
+
+	@Override
+	public void connect(Layer l) {
+
+
+	}
+
+}
+
+
+class Convolution extends Layer {
+
+	private Volume[] _filters;
+	private int _stride;
+	private int _pad;
+
+	private int _filterW;
+	private int _filterH;
+	private int _filterD;
+
+
+	public Convolution(int filterW, int filterH, int filterD, int stride, int pad, double bias) {
+		this.type = LayerType.convolution;
+		_filterW = filterW;
+		_filterH = (filterH == 0) ? filterW : filterH;
+		_filterD = filterD;
+		_stride = (stride == 0) ? 1 : stride;
+		_pad = pad;
+		this.bias = bias;
+	}
+
+
+	public void connect(Layer l) {
+
+		this.inW(l.outW());
+		this.inH(l.outH());
+		this.inD(l.outD());
+
+		int w = (int) Math.floor((double) (this.inW() + _pad * 2 - _filterW) / _stride + 1);
+		this.outW(w);
+
+		int h = (int) Math.floor((double) (this.inH() + _pad * 2 - _filterH) / _stride + 1);
+		this.outH(h);
+
+		this.outD(_filterD);
+
+		_filters = new Volume[_filterD];
+		for (int i = 0; i < _filters.length; i++) {
+			_filters[i] = new Volume(_filterW, _filterH, this.inD());
+		}
+
+		this.biases = new Volume(1, 1, this.outD(), this.bias);
+	}
+
+
+	public Volume forward(Volume c) {
+
+		this.input = c;
+		Volume A = new Volume(this.outW(), this.outH(), this.outD(), 0.0);
+
+		int inW = c.width();
+		int inH = c.height();
+
+		for (int d = 0; d < this.outD(); d++) {
+			Volume f = this._filters[d];
+			int x = -this._pad;
+			int y = -this._pad;
+			for (int ay = 0; ay < this.outH(); y += _stride, ay++) {
+				x = -this._pad;
+				for (int ax = 0; ax < this.outW(); x += _stride, ax++) {
+					double a = 0.0;
+					for (int fy = 0; fy < f.height(); fy++) {
+						int oy = y + fy;
+						for (int fx = 0; fx < f.height(); fx++) {
+							int ox = x + fx;
+							if (oy >= 0 && oy < inH && ox >= 0 && ox < inW) {
+								for (int fd = 0; fd < f.depth(); fd++) {
+									a += f.W[((f.width() * fy) + fx) * f.depth() + fd] * c.W[((inW * oy) + ox) * c.depth() + fd];
+								}
+							}
+						}
+					}
+					a += this.biases.W[d];
+					A.set(ax, ay, d, a);
+				}
+			}
+		}
+		this.output = A;
+		return this.output;
+	}
+
+
+	public void backward() {
+		Volume in = this.input;
+		in.dW = new double[in.W.length];
+
+		int inW = in.width();
+		int inH = in.height();
+
+		for (int d = 0; d < this.outD(); d++) {
+			Volume f = this._filters[d];
+			int x = -this._pad;
+			int y = -this._pad;
+			for (int ay = 0; ay < this.outW(); y += _stride, ay++) {
+				x = -this._pad;
+				for (int ax = 0; ax < this.outW(); x += _stride, ax++) {
+					double grad = this.output.getGrad(ax, ay, d);
+					for (int fy = 0; fy < f.height(); fy++) {
+						int oy = y + fy;
+						for (int fx = 0; fx < f.width(); fx++) {
+							int ox = x + fx;
+							if (oy >= 0 && oy < inH && ox >= 0 && ox < inW) {
+								for (int fd = 0; fd < f.depth(); fd++) {
+									int ix1 = ((inW * oy) + ox) * in.depth() + fd;
+									int ix2 = ((f.width() * fy) + fx) * f.depth() + fd;
+									f.dW[ix2] += in.W[ix1] * grad;
+									in.dW[ix1] += f.W[ix2] * grad;
+								}
+							}
+						}
+					}
+					this.biases.dW[d] += grad;
+				}
+			}
+		}
+	}
+
+
+	public Volume[] response() {
+		Volume[] ret = new Volume[_filters.length + 1];
+		for (int i = 0; i < _filters.length; i++) {
+			ret[i] = _filters[i];
+		}
+		ret[_filters.length] = this.biases;
+		return ret;
+	}
+
+}
+
+
+class Pool extends Layer {
+
+	private int _w;
+	private int _h;
+	private int _d;
+	private int _stride;
+	private int _pad;
+
+	private int[] _mapx;
+	private int[] _mapy;
+
+
+	public Pool(int filterW, int filterH, int stride, int pad) {
+		this.type = LayerType.pool;
+		_w = filterW;
+		_h = (filterH == 0) ? _w : filterH;
+		_stride = (stride == 0) ? 1 : stride;
+		_pad = pad;
+	}
+
+
+	public void connect(Layer l) {
+
+		this.inW(l.outW());
+		this.inH(l.outH());
+		this.inD(l.outD());
+
+		this.outD(this.inD());
+
+		int w = (int) Math.floor((double) (this.inW() + _pad * 2 - _w) / _stride + 1);
+		this.outW(w);
+
+		int h = (int) Math.floor((double) (this.inH() + _pad * 2 - _h) / _stride + 1);
+		this.outH(h);
+
+		_mapx = new int[this.outLength()];
+		_mapy = new int[this.outLength()];
+
+	}
+
+
+	public Volume forward(Volume c) {
+
+		this.input = c;
+		Volume A = new Volume(this.outW(), this.outH(), this.outD(), 0.0);
+
+		int n = 0; // a counter for switches
+		for (int d = 0; d < this.outD(); d++) {
+			int x = -this._pad;
+			int y = -this._pad;
+			for (int ax = 0; ax < this.outW(); x += this._stride, ax++) {
+				y = -this._pad;
+				for (int ay = 0; ay < this.outH(); y += this._stride, ay++) {
+					double a = -999999999;
+					int px = -1;
+					int py = -1;
+					for (int fx = 0; fx < _w; fx++) {
+						for (int fy = 0; fy < _h; fy++) {
+							int oy = y + fy;
+							int ox = x + fx;
+							if (oy >= 0 && oy < c.height() && ox >= 0 && ox < c.width()) {
+								double v = c.get(ox, oy, d);
+								if (v > a) {
+									a = v;
+									px = ox;
+									py = oy;
+								}
+							}
+						}
+					}
+					this._mapx[n] = px;
+					this._mapy[n] = py;
+					n++;
+					A.set(ax, ay, d, a);
+				}
+			}
+		}
+
+		this.output = A;
+		return this.output;
+	}
+
+
+	public void backward() {
+		Volume V = this.input;
+		V.dW = new double[V.W.length];
+		Volume A = this.output;
+		int n = 0;
+		for (int d = 0; d < this.outD(); d++) {
+			int x = -this._pad;
+			int y = -this._pad;
+			for (int ax = 0; ax < this.outW(); x += this._stride, ax++) {
+				y = -this._pad;
+				for (int ay = 0; ay < this.outW(); y += this._stride, ay++) {
+					double grad = this.output.getGrad(ax, ay, d);
+					try {
+						V.addGrad(_mapx[n], _mapy[n], d, grad);
+
+						n++;
+					}
+					catch (Exception ex) {
+						Lab3.writeLine(ex.getMessage());
+					}
+				}
+			}
+		}
+	}
+
+}
+
+
+
+
+class FullConnect extends Layer {
+
+	private Volume[] _units;
+
+
+	public FullConnect(int units, double bias) {
+		this.type = LayerType.fullconnect;
+		_units = new Volume[units];
+		this.bias = bias;
+	}
+
+
+	public void connect(Layer l) {
+
+		this.inW(l.outW());
+		this.inH(l.outH());
+		this.inD(l.outD());
+
+		this.outH(1);
+		this.outW(1);
+		this.outD(_units.length);
+
+		for (int i = 0; i < _units.length; i++) {
+			_units[i] = new Volume(1, 1, this.inLength());
+		}
+
+		this.biases = new Volume(1, 1, this.outD(), this.bias);
+	}
+
+
+	public Volume forward(Volume x) {
+		this.input = x;
+
+		Volume out = new Volume(1, 1, this.outD(), 0);
+		this.output = out;
+
+		for (int i = 0; i < _units.length; i++) {
+			out.W[i] = x.dot(_units[i].W) + this.biases.W[i];
+		}
+
+		return out;
+	}
+
+
+	public void backward() {
+		double grad;
+		Volume in = this.input;
+		in.dW = new double[in.W.length];
+
+		for (int i = 0; i < _units.length; i++) {
+			Volume unit_i = _units[i];
+			grad = this.output.dW[i];
+			for (int d = 0; d < this.inLength(); d++) {
+				in.dW[d] += unit_i.W[d] * grad;
+				unit_i.dW[d] += in.W[d] * grad;
+			}
+			this.biases.dW[i] += grad;
+		}
+	}
+
+
+	public Volume[] response() {
+		Volume[] ret = new Volume[_units.length + 1];
+		for (int i = 0; i < _units.length; i++) {
+			ret[i] = _units[i];
+		}
+		ret[_units.length] = this.biases;
+		return ret;
+	}
+
+}
+
+
+
+
+class ActivationLayer extends Layer {
+
+	public ActivationLayer() {
+
+	}
+
+
+	public void connect(Layer l) {
+
+		this.inW(l.outW());
+		this.inH(l.outH());
+		this.inD(l.outD());
+		this.outW(this.inW());
+		this.outH(this.inH());
+		this.outD(this.inD());
+	}
+
+
+	public Volume forward(Volume x) {
+		this.input = x;
+		Volume out = new Volume(x, 0);
+		this.output = out;
+		double[] f = x.W;
+		double[] g = out.W;
+		this.computeForward(f, g);
+		return out;
+	}
+
+
+	public void backward() {
+		Volume in = this.input;
+		Volume out = this.output;
+		in.dW = new double[in.W.length];
+		double[] w = out.W;
+		double[] dw = in.dW;
+		this.computeBackward(w, dw);
+	}
+
+
+	protected void computeForward(double[] in, double[] out) {
+
+	}
+
+
+	protected void computeBackward(double[] w, double[] dw) {
+
+	}
+
+}
+
+class LeRu extends ActivationLayer {
+
+	public LeRu() {
+		this.type = LayerType.leru;
+	}
+
+
+	private double noise() {
+		return Math.random() * 0.001;
+	}
+
+	public Volume forward(Volume x) {
+		this.input = x;
+		Volume out = new Volume(x);
+		int n = x.W.length;
+		double[] outW = out.W;
+		for (int i = 0; i < n; i++) {
+			if (outW[i] < 0) outW[i] = 0;// = noise();
+		}
+		this.output = out;
+		return out;
+	}
+
+
+	public void backward() {
+		Volume in = this.input;
+		Volume out = this.output;
+		int n = in.W.length;
+		in.dW = new double[n];
+		for (int i = 0; i < n; i++) {
+			if (out.W[i] <= 0) in.dW[i] = 0; //= noise();
+			else in.dW[i] = out.dW[i];
+		}
+	}
+
+}
+
+
+
+class LossLayer extends Layer {
+
+	public void connect(Layer l) {
+
+		this.inW(l.outW());
+		this.inH(l.outH());
+		this.inD(l.outD());
+
+		this.outW(1);
+		this.outH(1);
+		this.outD(this.inLength());
+	}
+
+}
+
+
+class Softmax extends LossLayer {
+
+	private double[] _prob;
+
+
+	public Softmax() {
+		this.type = LayerType.softmax;
+	}
+
+
+	public Volume forward(Volume v) {
+		this.input = v;
+		Volume out = new Volume(1, 1, this.outD(), 0.0);
+
+		double[] as = v.W;
+		double amax = v.W[0];
+
+		for (int i = 1; i < this.outD(); i++) {
+			if (as[i] > amax) amax = as[i];
+		}
+
+		double[] prob = new double[this.outD()];
+		double sum = 0.0;
+		for (int i = 0; i < this.outD(); i++) {
+			double e = Math.exp(as[i] - amax);
+			sum += e;
+			prob[i] = e;
+		}
+
+
+		for (int i = 0; i < this.outD(); i++) {
+			prob[i] /= sum;
+			out.W[i] = prob[i];
+		}
+
+		this._prob = prob;
+		this.output = out;
+		return this.output;
+
+	}
+
+
+	public double backward(double[] v) {
+		double max = v[0];
+		int y = 0;
+		for (int i = 1; i < v.length; i++) {
+			if (v[i] > max) {
+				y = i;
+				max = v[i];
+			}
+		}
+
+		Volume x = this.input;
+		x.dW = new double[x.W.length];
+
+		for (int i = 0; i < this.outD(); i++) {
+			double indicator = (i == y) ? 1.0 : 0.0;
+			double c = -(indicator - this._prob[i]);
+			x.dW[i] = c;
+		}
+
+		return -Math.log(this._prob[y]);
+	}
+
+}
+
+
+class SGDTrainer extends Trainer {
+
+	private double _rate;
+	private double _momentum;
+	private double _decayL1;
+	private double _decayL2;
+	private double _decayLossL1;
+	private double _decayLossL2;
+	private double _loss = 0.0;
+	private int _batchSize;
+
+
+
+	public SGDTrainer(double learningRate, int batchSize, double momentum, double decayL1, double decayL2) {
+		_rate = learningRate;
+		_momentum = momentum;
+		_decayL1 = decayL1;
+		_decayL2 = decayL2;
+		_batchSize = batchSize;
+	}
+
+
+	@Override
+	protected void trainOneExample(ConvNet net, double[] x, double[] y) {
+
+		_decayLossL1 = 0.0;
+		_decayLossL2 = 0.0;
+		_loss = 0.0;
+
+
+		//timer.start();
+		this.net().forward(x);
+		//timer.stop();
+		//_forwardTime = timer.elapsedTime();
+
+		//timer.start();
+		_loss = this.net().backward(y);
+		//		timer.stop();
+		//		_backwardtime = timer.elapsedTime();
+
+		if ((this.step() % _batchSize) == 0) {
+
+			Volume[] r = this.net().response();
+
+			double[][] gs = new double[r.length][];
+			for (int i = 0; i < r.length; i++) {
+				gs[i] = new double[r[i].dW.length];
+			}
+
+			for (int i = 0; i < r.length; i++) {
+
+				double[] w = r[i].W;
+				double[] g = r[i].dW;
+
+				for (int j = 0; j < w.length; j++) {
+
+					_decayLossL1 += _decayL1 * Math.abs(w[j]);
+					_decayLossL2 += _decayL2 * w[j] * w[j] / 2;
+
+					double gradL1 = _decayL1 * (w[j] > 0 ? 1 : -1);
+					double gradL2 = _decayL2 * (w[j]);
+
+					double delta = (gradL1 + gradL2 + g[j]) / _batchSize;
+					double[] gs_i = gs[i];
+
+					if (_momentum > 0.0) {
+						double dx = _momentum * gs_i[j] - _rate * delta;
+						gs_i[j] = dx;
+						w[j] += dx;
+					}
+					else {
+						w[j] += -_rate * delta;
+					}
+					g[j] = 0.0;
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+class DropOut extends Layer {
+
+	private boolean[] _dropped;
+
+	private double _dropProb;
+
+
+	public DropOut(double dropOutProb) {
+		this.type = LayerType.dropout;
+		_dropProb = dropOutProb;
+	}
+
+
+	public void connect(Layer l) {
+
+		this.inW(l.outW());
+		this.inH(l.outH());
+		this.inD(l.outD());
+
+		this.outW(this.inW());
+		this.outH(this.inH());
+		this.outD(this.inD());
+		_dropped = new boolean[this.outLength()];
+	}
+
+
+	public Volume forward(Volume x) {
+		this.input = x;
+
+		Volume out = new Volume(x);
+		int m = x.W.length;
+
+		if (this.training()) {
+			for (int i = 0; i < m; i++) {
+				if (Math.random() < this._dropProb) {
+					out.W[i] = 0;
+					this._dropped[i] = true;
+				} // drop!
+				else {
+					this._dropped[i] = false;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < m; i++) {
+				out.W[i] *= this._dropProb;
+			}
+		}
+
+		this.output = out;
+		return output;
+	}
+
+
+	public void backward() {
+		Volume in = this.input;
+		Volume grad = this.output;
+
+		in.dW = new double[in.W.length];
+		for (int i = 0; i < in.W.length; i++) {
+			if (!(this._dropped[i])) {
+				in.dW[i] = grad.dW[i];
+			}
+		}
+	}
+
+}
+
+
 public class Lab3 {
 
 	private static String[] _cats = new String[] { "airplane", "butterfly", "flower", "piano", "starfish", "watch" };
 
-	
+
 	public static String sprintf(String format, Object... values) {
 		return String.format(format, values);
 	}
-	
-	private static void writeLine(String msg) {
+
+	public static void writeLine(String msg) {
 		System.out.println(msg);
 	}
 
-	private static DataSamples[] loadImageDataSets(String trainDir, String tuneDir, String testDir, int imageSize, ImageUtil.LoadOption option) {
+	private static ExampleSet[] loadImageDataSets(String trainDir, String tuneDir, String testDir, int imageSize, ImageUtil.LoadOption option) {
 		ImageDataSetReader train = new ImageDataSetReader(trainDir, _cats, imageSize, option);
 		ImageDataSetReader tune = new ImageDataSetReader(tuneDir, _cats, imageSize, option);
 		ImageDataSetReader test = new ImageDataSetReader(testDir, _cats, imageSize, option);
-		DataSamples[] set = new DataSamples[3];
+		ExampleSet[] set = new ExampleSet[3];
 		set[0] = train.readDataSet();
 		set[1] = tune.readDataSet();
 		set[2] = test.readDataSet();
@@ -1468,6 +2151,8 @@ public class Lab3 {
 	}
 
 
+
+
 	private static double printConfusionMatrix(ConvNet net, Example[] test) {
 		int w = test[0].y.W.length;
 		int[][] confusion = new int[w][w];
@@ -1513,7 +2198,8 @@ public class Lab3 {
 	}
 
 
-	private static void learningCurve(DataSamples[] dataSets) {
+
+	private static void learningCurve(ExampleSet[] dataSets) {
 
 		Example[] train = dataSets[0].examples();
 		Example[] tune = dataSets[1].examples();
@@ -1526,7 +2212,6 @@ public class Lab3 {
 			ConvNet net = new ConvNet();
 
 			Example ex = train[0];
-
 
 			net.addLayer(new Input(ex.x.width(), ex.x.height(), ex.x.depth()));
 
@@ -1551,7 +2236,7 @@ public class Lab3 {
 			double lambda = 0.0001;
 
 			Trainer trainer = new SGDTrainer(eta, 4, alpha, 0.005, lambda);
-			
+
 			net.epochs = 50;
 
 			trainer.train(net, train, tune);
@@ -1569,7 +2254,7 @@ public class Lab3 {
 	}
 
 
-	public static void trainAndTest(DataSamples[] dataSets, int epochs) {
+	public static void trainAndTest(ExampleSet[] dataSets, int epochs) {
 
 		ConvNet net = new ConvNet();
 		Example ex = dataSets[0].get(0);
@@ -1620,13 +2305,9 @@ public class Lab3 {
 			writeLine("Test accuracy: " + sprintf("%1.8f", (1 - testerr)));
 			writeLine("");
 			writeLine("");
-			
-			//Volume[] filters = net.layers()[1].response();
-			//ImageUtil.saveFilters(filters, 5, "./images/epoch_" + t.epoch() + "_l1_filters" + ".png");
-			//ImageUtil.saveVolumeLayers(net.layers()[2].output, 5, "./images/epoch_" + t.epoch() + "_l1_activation" + ".png");
-									
 
-			//if (trainerr == 0.0) return false;
+
+			if (trainerr < 0.02 || tuneerr < 0.21) return false;
 
 			return true;
 		});
@@ -1635,15 +2316,45 @@ public class Lab3 {
 		net.epochs = epochs;
 		trainer.train(net, dataSets[0].examples(), dataSets[1].examples());
 
-		saveErrorImages(net, dataSets[2].examples());
+		writeLine("** Final Results **");
+		double err = printConfusionMatrix(net, dataSets[2].examples());
+		writeLine("Test accuracy: " + sprintf("%1.8f", (1 - err)));
+		writeLine("");
+		writeLine("");
 
 		writeLine("");
 	}
 
 
-	
 	public static void main(String[] args) {
-		System.out.println("Hello!");
+
+		String trainDirectory = "images/trainset/";
+		String tuneDirectory = "images/tuneset/";
+		String testDirectory = "images/testset/";
+
+		int imageSize = 32;
+
+		if (args.length > 5 || args.length < 3) {
+			System.err.println("Usage error: java Lab3 <train_set_folder_path> <tune_set_folder_path> <test_set_folder_path> <imageSize>");
+			System.exit(1);
+		}
+		if (args.length >= 1) {
+			trainDirectory = args[0];
+		}
+		if (args.length >= 2) {
+			tuneDirectory = args[1];
+		}
+		if (args.length >= 3) {
+			testDirectory = args[2];
+		}
+		if (args.length >= 4) {
+			imageSize = Integer.parseInt(args[3]);
+		}
+
+
+		ExampleSet[] dataSets = loadImageDataSets(trainDirectory, tuneDirectory, testDirectory, imageSize, ImageUtil.LoadOption.RGB_EDGES);
+
+		trainAndTest(dataSets, 150);
 	}
 
 }
