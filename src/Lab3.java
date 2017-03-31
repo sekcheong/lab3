@@ -1099,7 +1099,7 @@ class ImageUtil {
 				break;
 
 			case 1:
-				// Flip the image horizontally
+				// Flip the image horizontally  
 				tx = AffineTransform.getScaleInstance(-1, 1);
 				tx.translate(-image.getWidth(null), 0);
 				op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
