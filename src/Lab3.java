@@ -2265,24 +2265,22 @@ public class Lab3 {
 		net.addLayer(new LeRu());
 		net.addLayer(new Pool(2, 2, 2, 1));
 
-		net.addLayer(new Convolution(5, 5, 16, 1, 2, 1.0));
-		net.addLayer(new LeRu());
-		net.addLayer(new Pool(2, 2, 2, 1));
-
 		net.addLayer(new Convolution(5, 5, 20, 1, 2, 1.0));
 		net.addLayer(new LeRu());
 		net.addLayer(new Pool(2, 2, 2, 1));
-		net.addLayer(new DropOut(0.5));
 
+		net.addLayer(new Convolution(5, 5, 16, 1, 2, 1.0));
+		net.addLayer(new LeRu());
+		net.addLayer(new Pool(2, 2, 2, 1));
+		
 		net.addLayer(new FullConnect(ex.y.depth(), 1.0));
 		net.addLayer(new Softmax());
 
-		double eta = 0.007;
+		double eta = 0.001;
 		double alpha = 0.90;
 		double lambda = 0.0001;
 
 		Trainer trainer = new SGDTrainer(eta, 4, alpha, 0.005, lambda);
-
 
 		trainer.onEpoch(t -> {
 			writeLine("Epoch: " + t.epoch());
@@ -2290,24 +2288,23 @@ public class Lab3 {
 			double testerr;
 			double tuneerr;
 
-			writeLine("Train size: " + dataSets[0].examples().length);
+			//writeLine("Train size: " + dataSets[0].examples().length);
 			trainerr = printConfusionMatrix(net, dataSets[0].examples());
 			writeLine("Train accuracy: " + sprintf("%1.8f", (1 - trainerr)));
 			writeLine("");
 
-			writeLine("Tune size: " + dataSets[1].examples().length);
+			//writeLine("Tune size: " + dataSets[1].examples().length);
 			tuneerr = printConfusionMatrix(net, dataSets[1].examples());
 			writeLine("Tune accuracy: " + sprintf("%1.8f", (1 - tuneerr)));
 			writeLine("");
 
-			writeLine("Test size: " + dataSets[2].examples().length);
+			//writeLine("Test size: " + dataSets[2].examples().length);
 			testerr = printConfusionMatrix(net, dataSets[2].examples());
 			writeLine("Test accuracy: " + sprintf("%1.8f", (1 - testerr)));
 			writeLine("");
 			writeLine("");
 
-
-			if (trainerr < 0.02 || tuneerr < 0.21) return false;
+			if (trainerr < 0.02 || tuneerr < 0.21 || testerr <0.21) return false;
 
 			return true;
 		});
@@ -2334,7 +2331,7 @@ public class Lab3 {
 
 		int imageSize = 32;
 
-		if (args.length > 5 || args.length < 3) {
+		if (args.length > 5 || (args.length < 3 && args.length!=0)) {
 			System.err.println("Usage error: java Lab3 <train_set_folder_path> <tune_set_folder_path> <test_set_folder_path> <imageSize>");
 			System.exit(1);
 		}
